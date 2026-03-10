@@ -18,7 +18,7 @@ export const GenerationParams: {
     maxLightsInScene: number
 } = {
     radius: 8.0,
-    seed: 420,
+    seed: 67,
     wallNoiseValue: 0.4,
 
     activeGeneration: {
