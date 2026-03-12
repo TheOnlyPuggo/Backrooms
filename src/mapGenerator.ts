@@ -15,7 +15,10 @@ export const GenerationParams: {
         lightGeneration: boolean,
     },
 
-    maxLightsInScene: number
+    maxLightsInScene: number,
+
+    enableMovingScene: boolean,
+    movingFallInStrength: number,
 } = {
     radius: 8.0,
     seed: 67,
@@ -28,7 +31,10 @@ export const GenerationParams: {
         lightGeneration: true
     },
 
-    maxLightsInScene: 8
+    maxLightsInScene: 8,
+
+    enableMovingScene: false,
+    movingFallInStrength: 0.5,
 };
 
 const wallCubesMap: Map<string, THREE.Mesh> = new Map();
@@ -172,4 +178,44 @@ export function UpdateMap(scene: THREE.Scene, cameraPosition: THREE.Vector3): vo
     }
 
     CreateMap(scene, cameraPosition);
+}
+
+export function UpdateDynamicMap(cameraPosition: THREE.Vector3) {
+    if (!GenerationParams.enableMovingScene) return;
+
+    for (const [key, value] of wallCubesMap) {
+        let [kx, kz] = key.split(',').map(Number);
+        let xDistance = kx - cameraPosition.x;
+        let zDistance = kz - cameraPosition.z;
+        let distance = Math.sqrt(xDistance * xDistance + zDistance * zDistance);
+        distance *= GenerationParams.movingFallInStrength;
+        value.position.set(kx, Math.max(distance, 1.0) - 1.0, kz);
+    }
+
+    for (const [key, value] of floorCubesMap) {
+        let [kx, kz] = key.split(',').map(Number);
+        let xDistance = kx - cameraPosition.x;
+        let zDistance = kz - cameraPosition.z;
+        let distance = Math.sqrt(xDistance * xDistance + zDistance * zDistance);
+        distance *= GenerationParams.movingFallInStrength;
+        value.position.set(kx, Math.min(-distance, -1.0), kz);
+    }
+
+    for (const [key, value] of ceilingCubesMap) {
+        let [kx, kz] = key.split(',').map(Number);
+        let xDistance = kx - cameraPosition.x;
+        let zDistance = kz - cameraPosition.z;
+        let distance = Math.sqrt(xDistance * xDistance + zDistance * zDistance);
+        distance *= GenerationParams.movingFallInStrength;
+        value.position.set(kx, Math.max(distance, 1.0), kz);
+    }
+
+    for (const [key, value] of lightsMap) {
+        let [kx, kz] = key.split(',').map(Number);
+        let xDistance = kx - cameraPosition.x;
+        let zDistance = kz - cameraPosition.z;
+        let distance = Math.sqrt(xDistance * xDistance + zDistance * zDistance);
+        distance *= GenerationParams.movingFallInStrength;
+        value.position.set(kx, Math.max(distance, 1.0) - 0.6, kz);
+    }
 }

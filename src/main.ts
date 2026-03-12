@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CreateMap, GenerationParams, UpdateMap } from './mapGenerator';
+import { CreateMap, GenerationParams, UpdateDynamicMap, UpdateMap } from './mapGenerator';
 import { FirstPersonCamera, MovementParams } from './fpsCamera';
 import { FlyControls } from 'three/examples/jsm/Addons.js';
 import { CreateGUI } from './propUI';
@@ -105,6 +105,8 @@ function animate(time: number): void {
     } else if (!FogProps.enabled && Game.scene.fog != null) {
         Game.scene.fog = null;
     }
+
+    UpdateDynamicMap(Game.camera.position);
 
     requestAnimationFrame(animate);
 }

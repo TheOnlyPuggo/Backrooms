@@ -16,6 +16,9 @@ export const GenerationParamsUI: {
     },
 
     maxLightsInScene: number
+    enableMovingScene: boolean,
+
+    movingFallInStrength: number,
 } = {
     ...GenerationParams,
 };
@@ -79,6 +82,13 @@ export function CreateGUI
     });
     generationFolder.add(GenerationParamsUI.activeGeneration, "lightGeneration").onChange(() => {
         regenerate();
+    });
+    generationFolder.add(GenerationParamsUI, "enableMovingScene").onChange((value: boolean) => {
+        GenerationParams.enableMovingScene = value;
+        regenerate();
+    });
+    generationFolder.add(GenerationParamsUI, "movingFallInStrength", 0.0, 1.0).onChange((value: number) => {
+        GenerationParams.movingFallInStrength = value;
     });
 
 
