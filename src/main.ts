@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { CreateMap, GenerationParams, UpdateDynamicMap, UpdateMap } from './mapGenerator';
-import { FirstPersonCamera, MovementParams } from './fpsCamera';
+import { FirstPersonCamera } from './fpsCamera';
 import { FlyControls } from 'three/examples/jsm/Addons.js';
 import { CreateGUI } from './propUI';
 
@@ -14,9 +14,9 @@ const Game: {
     renderer: null,
 };
 
-const LightingProps: {
+export const LightingProps: {
     ambientLight : THREE.AmbientLight | null
-    ambientLightIntensity : number
+    ambientLightIntensity : number,
 } = {
     ambientLight: null,
     ambientLightIntensity: 0.6,
@@ -61,6 +61,8 @@ function init(): void {
 
     GameCamera.currentCameraGridX = Math.floor(Game.camera.position.x);
     GameCamera.currentCameraGridZ = Math.floor(Game.camera.position.z);
+
+    window.addEventListener("resize", onWindowResize, false);
 
     CreateMap(Game.scene, Game.camera.position);
 
@@ -115,4 +117,9 @@ export function updateCameraCollision(): void {
     if (!(GameCamera.cameraControls instanceof FirstPersonCamera)) return;
 
     GameCamera.cameraControls.collisionCheck();
+}
+
+function onWindowResize() {
+    Game.renderer?.setSize(window.innerWidth, window.innerHeight);
+    Game.camera?.updateMatrix();
 }

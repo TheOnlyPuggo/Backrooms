@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GUI } from 'dat.gui';
-import { GenerationParams, RegenerateMap, UpdateMap } from './mapGenerator';
+import { GenerationParams, RegenerateMap } from './mapGenerator';
 import { MovementParams } from './fpsCamera';
 
 export const GenerationParamsUI: {
@@ -61,7 +61,7 @@ export function CreateGUI
     });
     generationFolder.add(GenerationParamsUI, "radius").onChange((value: number) => {
         GenerationParams.radius = value;
-        UpdateMap(scene, cameraPosition);
+        regenerate();
     });
     generationFolder.add(GenerationParamsUI, "wallNoiseValue").onChange((value: number) => {
         GenerationParams.wallNoiseValue = value;
