@@ -59,11 +59,11 @@ export function CreateGUI
         GenerationParams.seed = value;
         regenerate();
     });
-    generationFolder.add(GenerationParamsUI, "radius").onChange((value: number) => {
+    generationFolder.add(GenerationParamsUI, "radius").min(0).max(128).step(1).onChange((value: number) => {
         GenerationParams.radius = value;
         regenerate();
     });
-    generationFolder.add(GenerationParamsUI, "wallNoiseValue").onChange((value: number) => {
+    generationFolder.add(GenerationParamsUI, "wallNoiseValue").min(0.0).max(1.0).onChange((value: number) => {
         GenerationParams.wallNoiseValue = value;
         regenerate();
     });
@@ -95,18 +95,18 @@ export function CreateGUI
     const movementFolder: GUI = gui.addFolder("Movement");
 
     const fpsFolder: GUI = movementFolder.addFolder("FirstPersonControls");
-    fpsFolder.add(MovementParams.firstPersonControls, "moveSpeed");
+    fpsFolder.add(MovementParams.firstPersonControls, "moveSpeed").min(0.0);
     fpsFolder.add(MovementParams.firstPersonControls, "collision");
 
     const flyMovementFolder: GUI = movementFolder.addFolder("FlyControls");
     flyMovementFolder.add(gameCamera, "enableFlyControls");
-    flyMovementFolder.add(gameCamera, "flySpeed");
+    flyMovementFolder.add(gameCamera, "flySpeed").min(0.0);
 
 
     const environmentFolder: GUI = gui.addFolder("Environment");
 
     const lightingFolder: GUI = environmentFolder.addFolder("Lighting");
-    lightingFolder.add(lightingProps, "ambientLightIntensity").onChange((value: number) => {
+    lightingFolder.add(lightingProps, "ambientLightIntensity").min(0.0).onChange((value: number) => {
         if (lightingProps.ambientLight) {
             lightingProps.ambientLight.intensity = value;
         }
